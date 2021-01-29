@@ -21,14 +21,14 @@ export default function BottomTabNavigator () {
         name='Search'
         component={SearchScreen}
         options={{
-          title: 'Поиск'
+          title: 'поиск'
         }}
       />
       <ModalStack.Screen
         name='Notifications'
         component={NotificationsScreen}
         options={{
-          title: 'Уведомления'
+          title: 'уведомления'
         }}
       />
     </ModalStack.Navigator>

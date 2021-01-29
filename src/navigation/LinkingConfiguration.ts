@@ -6,14 +6,29 @@ export default {
     screens: {
       Root: {
         screens: {
-          TabOne: {
+          Dashboard: {
             screens: {
-              TabOneScreen: 'one'
+              DashboardScreen: 'dashboard'
             }
           },
-          TabTwo: {
+          Clients: {
             screens: {
-              TabTwoScreen: 'two'
+              ClientsScreen: 'clients'
+            }
+          },
+          Products: {
+            screens: {
+              ProductsScreen: 'products'
+            }
+          },
+          Offers: {
+            screens: {
+              OffersScreen: 'offers'
+            }
+          },
+          Invoices: {
+            screens: {
+              InvoicesScreen: 'invoices'
             }
           }
         }

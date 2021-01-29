@@ -9,8 +9,6 @@ import ModalNavigator from './ModalNavigator'
 import DrawerNavigator from './DrawerNavigator'
 import LinkingConfiguration from './LinkingConfiguration'
 
-// If you are not familiar with React Navigation, we recommend going through the
-// "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
 export default function Navigation ({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
     <NavigationContainer
@@ -27,9 +25,9 @@ const Stack = createStackNavigator<RootStackParamList>()
 
 function RootNavigator () {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator screenOptions={{ headerShown: false, animationEnabled: true }}>
       <Stack.Screen name='Root' component={DrawerNavigator} />
-      <Stack.Screen name='Modal' component={ModalNavigator} options={{ title: 'Oops!' }} />
+      <Stack.Screen name='Modal' component={ModalNavigator} />
       <Stack.Screen name='NotFound' component={NotFoundScreen} options={{ title: 'Oops!' }} />
     </Stack.Navigator>
   )
