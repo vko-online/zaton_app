@@ -13,7 +13,8 @@ export default {
           },
           Clients: {
             screens: {
-              ClientsScreen: 'clients'
+              ClientsScreen: 'clients',
+              NewClientScreen: 'clients/new'
             }
           },
           Products: {

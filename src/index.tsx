@@ -21,7 +21,7 @@ export default function Index () {
       <SafeAreaProvider>
         <Provider theme={theme}>
           <Navigation colorScheme={colorScheme} />
-          <StatusBar />
+          <StatusBar style='light' />
         </Provider>
       </SafeAreaProvider>
     )

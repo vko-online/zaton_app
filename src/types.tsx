@@ -28,6 +28,7 @@ export type TabTwoParamList = {
 
 export type ClientsParamList = {
   ClientsScreen: undefined
+  NewClientScreen: undefined
 }
 
 export type ProductsParamList = {

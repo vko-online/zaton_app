@@ -1,11 +1,12 @@
 import React from 'react'
 import { Platform } from 'react-native'
-import { createDrawerNavigator } from '@react-navigation/drawer'
-import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack'
-import Header from './Header'
+import { createDrawerNavigator, DrawerNavigationProp } from '@react-navigation/drawer'
+import { IconButton } from 'react-native-paper'
+import { createStackNavigator } from '@react-navigation/stack'
 import DrawerContent from './Drawer'
 
 import ClientsScreen from 'src/screens/Clients'
+import NewClientScreen from 'src/screens/Clients/NewClient'
 import ProductsScreen from 'src/screens/Products'
 import OffersScreen from 'src/screens/Offers'
 import InvoicesScreen from 'src/screens/Invoices'
@@ -23,9 +24,12 @@ import {
 import useIsLargeScreen from 'src/hooks/useIsLargeScreen'
 
 const Drawer = createDrawerNavigator<DrawerParamList>()
+const titleStyle = {
+  fontFamily: 'montserrat-regular'
+}
 
-const screenOptions: StackNavigationOptions = {
-  header: (props) => <Header {...props} />
+interface DrawerOptionProps {
+  navigation: DrawerNavigationProp<DrawerParamList>
 }
 
 type DrawerType = 'front' | 'back' | 'slide' | 'permanent';
@@ -44,7 +48,7 @@ export default function BottomTabNavigator () {
     >
       <Drawer.Screen name='Dashboard' component={DashboardNavigator} options={{ title: 'Главная' }} />
       <Drawer.Screen name='Clients' component={ClientsNavigator} options={{ title: 'Клиенты' }} />
-      <Drawer.Screen name='Products' component={ProductsNavigator} options={{ title: 'Товары и Услуги' }} />
+      <Drawer.Screen name='Products' component={ProductsNavigator} options={{ title: 'Товары' }} />
       <Drawer.Screen name='Invoices' component={InvoicesNavigator} options={{ title: 'Счета' }} />
       <Drawer.Screen name='Employees' component={EmployeesNavigator} options={{ title: 'Сотрудники' }} />
       <Drawer.Screen name='Offers' component={OffersNavigator} options={{ title: 'Коммерческие предложения' }} />
@@ -55,11 +59,14 @@ export default function BottomTabNavigator () {
 const DashboardStack = createStackNavigator<DashboardParamList>()
 function DashboardNavigator () {
   return (
-    <DashboardStack.Navigator screenOptions={screenOptions}>
+    <DashboardStack.Navigator>
       <DashboardStack.Screen
         name='DashboardScreen'
         component={DashboardScreen}
-        options={{ title: 'главная' }}
+        options={({ navigation }: DrawerOptionProps) => ({
+          title: 'Главная',
+          headerLeft: () => <IconButton icon='menu' onPress={() => navigation.openDrawer()} />
+        })}
       />
     </DashboardStack.Navigator>
   )
@@ -68,11 +75,27 @@ function DashboardNavigator () {
 const ClientsStack = createStackNavigator<ClientsParamList>()
 function ClientsNavigator () {
   return (
-    <ClientsStack.Navigator screenOptions={screenOptions}>
+    <ClientsStack.Navigator initialRouteName='ClientsScreen'>
       <ClientsStack.Screen
         name='ClientsScreen'
         component={ClientsScreen}
-        options={{ title: 'клиенты' }}
+        options={({ navigation }: DrawerOptionProps) => ({
+          title: 'Клиенты',
+          headerTitleStyle: titleStyle,
+          headerTitle: 'Клиенты',
+          headerLeft: () => <IconButton icon='menu' onPress={() => navigation.openDrawer()} />,
+          headerRight: () => <IconButton icon='filter' />
+        })}
+      />
+      <ClientsStack.Screen
+        name='NewClientScreen'
+        component={NewClientScreen}
+        options={({ navigation }) => ({
+          title: 'Новый клиент',
+          headerTitleStyle: titleStyle,
+          headerTitle: 'Новый клиент',
+          headerLeft: () => <IconButton icon='keyboard-backspace' onPress={() => navigation.navigate('ClientsScreen')} />
+        })}
       />
     </ClientsStack.Navigator>
   )
@@ -81,11 +104,14 @@ function ClientsNavigator () {
 const ProductsStack = createStackNavigator<ProductsParamList>()
 function ProductsNavigator () {
   return (
-    <ProductsStack.Navigator screenOptions={screenOptions}>
+    <ProductsStack.Navigator>
       <ProductsStack.Screen
         name='ProductsScreen'
         component={ProductsScreen}
-        options={{ title: 'товары и услуги' }}
+        options={({ navigation }: DrawerOptionProps) => ({
+          title: 'Товары',
+          headerLeft: () => <IconButton icon='menu' onPress={() => navigation.openDrawer()} />
+        })}
       />
     </ProductsStack.Navigator>
   )
@@ -94,11 +120,14 @@ function ProductsNavigator () {
 const InvoicesStack = createStackNavigator<InvoicesParamList>()
 function InvoicesNavigator () {
   return (
-    <InvoicesStack.Navigator screenOptions={screenOptions}>
+    <InvoicesStack.Navigator>
       <InvoicesStack.Screen
         name='InvoicesScreen'
         component={InvoicesScreen}
-        options={{ title: 'счета' }}
+        options={({ navigation }: DrawerOptionProps) => ({
+          title: 'Счета',
+          headerLeft: () => <IconButton icon='menu' onPress={() => navigation.openDrawer()} />
+        })}
       />
     </InvoicesStack.Navigator>
   )
@@ -107,11 +136,14 @@ function InvoicesNavigator () {
 const OffersStack = createStackNavigator<OffersParamList>()
 function OffersNavigator () {
   return (
-    <OffersStack.Navigator screenOptions={screenOptions}>
+    <OffersStack.Navigator>
       <OffersStack.Screen
         name='OffersScreen'
         component={OffersScreen}
-        options={{ title: 'коммерческие предложения' }}
+        options={({ navigation }: DrawerOptionProps) => ({
+          title: 'Коммерческие предложения',
+          headerLeft: () => <IconButton icon='menu' onPress={() => navigation.openDrawer()} />
+        })}
       />
     </OffersStack.Navigator>
   )
@@ -120,11 +152,14 @@ function OffersNavigator () {
 const EmployeesStack = createStackNavigator<EmployeesParamList>()
 function EmployeesNavigator () {
   return (
-    <EmployeesStack.Navigator screenOptions={screenOptions}>
+    <EmployeesStack.Navigator>
       <EmployeesStack.Screen
         name='EmployeesScreen'
         component={EmployeesScreen}
-        options={{ title: 'коммерческие предложения' }}
+        options={({ navigation }: DrawerOptionProps) => ({
+          title: 'Сотрудники',
+          headerLeft: () => <IconButton icon='menu' onPress={() => navigation.openDrawer()} />
+        })}
       />
     </EmployeesStack.Navigator>
   )
