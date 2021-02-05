@@ -1,0 +1,27 @@
+query ViewClient ($id: ID!) {
+  client (id: $id) {
+    id
+    iin
+    companyName
+    address
+    phone
+    email
+    contactFullName
+    contactRole
+    note
+    ltv
+    createdAt
+    accounts {
+      id
+      bic
+      iban
+    }
+    docs {
+			id
+      date
+      dueDate
+      note
+      createdAt
+    }
+  }
+}

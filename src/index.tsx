@@ -2,11 +2,12 @@ import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Provider } from 'react-native-paper'
-
+import { ApolloProvider } from '@apollo/client'
 import useCachedResources from 'src/hooks/useCachedResources'
 import useColorScheme from 'src/hooks/useColorScheme'
 import Navigation from 'src/navigation'
 import { getTheme } from 'src/constants/Theme'
+import client from 'src/services/api'
 
 export default function Index () {
   const isLoadingComplete = useCachedResources()
@@ -19,10 +20,12 @@ export default function Index () {
   } else {
     return (
       <SafeAreaProvider>
-        <Provider theme={theme}>
-          <Navigation colorScheme={colorScheme} />
-          <StatusBar style='light' />
-        </Provider>
+        <ApolloProvider client={client}>
+          <Provider theme={theme}>
+            <Navigation colorScheme={colorScheme} />
+            <StatusBar style='light' />
+          </Provider>
+        </ApolloProvider>
       </SafeAreaProvider>
     )
   }

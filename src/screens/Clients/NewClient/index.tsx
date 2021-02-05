@@ -5,25 +5,11 @@ import { StackScreenProps } from '@react-navigation/stack'
 import * as Yup from 'yup'
 import { FieldArray, Formik } from 'formik'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-
-import { RootStackParamList } from 'src/types'
+import { Spacer } from 'src/components/Common'
+import { ClientsParamList } from 'src/types'
 import Dropdown from 'src/components/Dropdown'
+import { useCreateClientMutation, ClientInput, AccountInput } from 'src/generated/graphql'
 
-interface BankAccount {
-  name: string
-  bic: string
-  iban: string
-}
-interface NewClientForm {
-  companyName: string
-  address: string
-  email: string
-  iin: string
-  phone: string
-  contactFullName: string
-  contactRole: string
-  bankAccounts: BankAccount[]
-}
 const bankSchema = Yup.object({
   name: Yup.string().required(),
   bic: Yup.string().required(),
@@ -39,15 +25,17 @@ const schema = Yup.object({
   contactRole: Yup.string().optional(),
   bankAccounts: Yup.array(bankSchema)
 })
-const initialBankAccount: BankAccount = {
-  bic: 'demo',
+const initialAccount: AccountInput = {
+  bic: '',
   iban: '',
-  name: 'demo'
+  name: ''
 }
-const initialValues: NewClientForm = {
+const initialValues: ClientInput = {
+  id: null,
   address: '',
   phone: '',
-  bankAccounts: [],
+  accounts: [],
+  note: '',
   companyName: '',
   contactFullName: '',
   contactRole: '',
@@ -55,31 +43,41 @@ const initialValues: NewClientForm = {
   iin: ''
 }
 const banks = [{
-  id: 1,
   bic: 'XC34',
   name: 'kaspi'
 }, {
-  id: 2,
   bic: 'A341',
   name: 'halyk'
 }, {
-  id: 3,
   bic: 'NG21',
   name: 'sber'
 }]
 export default function Screen ({
   navigation
-}: StackScreenProps<RootStackParamList, 'NotFound'>) {
-  function handleSubmit (values: NewClientForm) {}
+}: StackScreenProps<ClientsParamList, 'NewClientScreen'>) {
+  const [createClient, { loading }] = useCreateClientMutation()
+  async function onSubmit (values: ClientInput) {
+    try {
+      const response = await createClient({
+        variables: {
+          data: values
+        }
+      })
+      console.log('response', response)
+      navigation.goBack()
+    } catch (e) {
+      console.log('error', e.message)
+    }
+  }
 
   return (
     <KeyboardAwareScrollView>
       <Formik
         initialValues={initialValues}
         validationSchema={schema}
-        onSubmit={handleSubmit}
+        onSubmit={onSubmit}
       >
-        {({ values, handleChange }) => (
+        {({ values, handleChange, handleSubmit, isValid }) => (
           <>
             <Surface style={s.card}>
               <Caption>Базовая информация</Caption>
@@ -90,7 +88,7 @@ export default function Screen ({
                 onChangeText={handleChange('iin')}
                 value={values.iin}
               />
-              <View style={s.spacer} />
+              <Spacer />
               <TextInput
                 label='Наименование'
                 placeholder='Наименование компании'
@@ -106,50 +104,52 @@ export default function Screen ({
                 placeholder='Полное имя контактного лица'
                 mode='outlined'
                 onChangeText={handleChange('contactFullName')}
-                value={values.contactFullName}
+                value={values.contactFullName!}
               />
-              <View style={s.spacer} />
+              <Spacer />
               <TextInput
                 label='Должность'
                 placeholder='Должность контактного лица'
                 mode='outlined'
                 onChangeText={handleChange('contactRole')}
-                value={values.contactRole}
+                value={values.contactRole!}
               />
-              <View style={s.spacer} />
+              <Spacer />
               <TextInput
                 label='Телефон'
                 placeholder='Номер телефона компании'
                 mode='outlined'
                 onChangeText={handleChange('phone')}
-                value={values.phone}
+                value={values.phone!}
               />
-              <View style={s.spacer} />
+              <Spacer />
               <TextInput
                 label='Email'
                 placeholder='Почтовый адрес компании'
                 mode='outlined'
+                keyboardType='email-address'
+                autoCapitalize='none'
                 onChangeText={handleChange('email')}
-                value={values.email}
+                value={values.email!}
               />
-              <View style={s.spacer} />
+              <Spacer />
               <TextInput
                 label='Адрес'
                 placeholder='Адрес компании'
                 mode='outlined'
                 onChangeText={handleChange('address')}
-                value={values.address}
+                value={values.address!}
               />
             </Surface>
             <Surface style={s.card}>
               <Caption>Счета</Caption>
               <FieldArray
-                name='bankAccounts'
+                name='accounts'
                 render={(arrayHelpers) => (
                   <>
                     {
-                      values.bankAccounts && values.bankAccounts.length
-                        ? values.bankAccounts.map((bank, index) => (
+                      values.accounts && values.accounts.length
+                        ? values.accounts.map((bank, index) => (
                             <View key={index}>
                               <View style={s.row}>
                                 <View style={s.full}>
@@ -157,16 +157,16 @@ export default function Screen ({
                                     label='IBAN'
                                     placeholder='Номер IBAN счета'
                                     mode='outlined'
-                                    onChangeText={handleChange(`bankAccounts.${index}.iban`)}
-                                    value={values.bankAccounts[index].iban}
+                                    onChangeText={handleChange(`accounts.${index}.iban`)}
+                                    value={values!.accounts![index]!.iban}
                                   />
-                                  <View style={s.spacer} />
+                                  <Spacer />
                                   <Dropdown placeholder='Выбрать банк' noOptionLabel='Банк не выбран'>
                                     {banks.map(v => (
                                       <Dropdown.Option
-                                        itemKey={v.id}
-                                        key={v.id}
-                                        value={v.id}
+                                        itemKey={v.bic}
+                                        key={v.bic}
+                                        value={v.bic}
                                         label={v.name}
                                         title={v.name}
                                         description={v.bic}
@@ -176,10 +176,10 @@ export default function Screen ({
                                 </View>
                                 <IconButton icon='close' onPress={() => arrayHelpers.remove(index)} />
                               </View>
-                              <View style={s.spacer} />
+                              <Spacer />
                               {
-                                index === values?.bankAccounts.length - 1
-                                  ? <Button icon='plus' mode='outlined' onPress={() => arrayHelpers.insert(index, initialBankAccount)}>
+                                index === values?.accounts!.length - 1
+                                  ? <Button icon='plus' mode='outlined' onPress={() => arrayHelpers.insert(index, initialAccount)}>
                                       Добавить еще счет
                                     </Button>
                                   : null
@@ -187,7 +187,7 @@ export default function Screen ({
                               <Divider />
                             </View>
                           ))
-                        : <Button icon='plus' mode='outlined' onPress={() => arrayHelpers.push(initialBankAccount)}>
+                        : <Button icon='plus' mode='outlined' onPress={() => arrayHelpers.push(initialAccount)}>
                             Добавить счет
                           </Button>
                     }
@@ -196,11 +196,11 @@ export default function Screen ({
               />
             </Surface>
             <Surface style={s.card}>
-              <Button mode='contained'>Добавить</Button>
+              <Button disabled={!isValid || loading} mode='contained' onPress={handleSubmit}>Добавить</Button>
             </Surface>
-            <View style={s.spacer} />
-            <View style={s.spacer} />
-            <View style={s.spacer} />
+            <Spacer />
+            <Spacer />
+            <Spacer />
           </>
         )}
       </Formik>

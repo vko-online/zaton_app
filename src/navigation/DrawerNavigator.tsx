@@ -1,5 +1,5 @@
 import React from 'react'
-import { Platform } from 'react-native'
+import { Platform, useWindowDimensions } from 'react-native'
 import { createDrawerNavigator, DrawerNavigationProp } from '@react-navigation/drawer'
 import { IconButton } from 'react-native-paper'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -7,6 +7,7 @@ import DrawerContent from './Drawer'
 
 import ClientsScreen from 'src/screens/Clients'
 import NewClientScreen from 'src/screens/Clients/NewClient'
+import ViewClientScreen from 'src/screens/Clients/ViewClient'
 import ProductsScreen from 'src/screens/Products'
 import OffersScreen from 'src/screens/Offers'
 import InvoicesScreen from 'src/screens/Invoices'
@@ -21,7 +22,6 @@ import {
   OffersParamList,
   ProductsParamList
 } from 'src/types'
-import useIsLargeScreen from 'src/hooks/useIsLargeScreen'
 
 const Drawer = createDrawerNavigator<DrawerParamList>()
 const titleStyle = {
@@ -34,7 +34,8 @@ interface DrawerOptionProps {
 
 type DrawerType = 'front' | 'back' | 'slide' | 'permanent';
 export default function BottomTabNavigator () {
-  const isLargeScreen = useIsLargeScreen()
+  const dimensions = useWindowDimensions()
+  const isLargeScreen = dimensions.width >= 768
   const drawerType = Platform.select<DrawerType>({
     web: isLargeScreen ? 'permanent' : 'front',
     default: 'front'
@@ -95,6 +96,17 @@ function ClientsNavigator () {
           headerTitleStyle: titleStyle,
           headerTitle: 'Новый клиент',
           headerLeft: () => <IconButton icon='keyboard-backspace' onPress={() => navigation.navigate('ClientsScreen')} />
+        })}
+      />
+      <ClientsStack.Screen
+        name='ViewClientScreen'
+        component={ViewClientScreen}
+        options={({ navigation, route }) => ({
+          title: route.params?.client?.companyName,
+          headerTitleStyle: titleStyle,
+          headerTitle: route.params?.client?.companyName,
+          headerLeft: () => <IconButton icon='keyboard-backspace' onPress={() => navigation.navigate('ClientsScreen')} />,
+          headerRight: () => <IconButton icon='share-variant' />
         })}
       />
     </ClientsStack.Navigator>

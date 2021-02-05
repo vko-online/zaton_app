@@ -4,12 +4,13 @@ import {
   CommonActions
 } from '@react-navigation/native'
 import { Appbar } from 'react-native-paper'
-import useIsLargeScreen from 'src/hooks/useIsLargeScreen'
 import Constants from 'expo-constants'
 import { StackHeaderProps } from '@react-navigation/stack'
+import { useWindowDimensions } from 'react-native'
 
 export default function Header ({ scene, navigation }: StackHeaderProps) {
-  const isLargeScreen = useIsLargeScreen()
+  const dimensions = useWindowDimensions()
+  const isLargeScreen = dimensions.width >= 768
   const titles = [Constants.manifest.name, scene.descriptor.options.title].join(' / ')
 
   return (

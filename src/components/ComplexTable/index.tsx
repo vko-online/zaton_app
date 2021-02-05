@@ -1,32 +1,39 @@
+import { ApolloError } from '@apollo/client'
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { DataTable, Menu } from 'react-native-paper'
+import { DataTable, Menu, ActivityIndicator } from 'react-native-paper'
 
+const ITEMS_PER_PAGE = 10
+type Dynamic<T> = keyof T
 type Row<T> = {
   label: string
-  value: keyof T
+  value: Dynamic<T>
 }
 interface Props<T> {
-  data: T[]
+  data?: T[] | null
+  loading: boolean
   first: Row<T>
   middle: Array<Row<T>>
   last: Row<T>
   onPress?: (item: T) => void
+  error?: ApolloError
 }
 const Order = {
   ascending: 'ascending',
   descending: 'descending'
 }
-type State<K> = {
+type State<T> = {
   orderedColumn: number
   ordering?: keyof typeof Order
-  column2Show: keyof K
+  column2Show: Dynamic<T>
 }
 export default function Screen<T> ({
   data,
   first,
   middle,
   last,
+  loading,
+  error,
   onPress
 }: Props<T>) {
   const [visible, setVisible] = useState(false)
@@ -35,6 +42,7 @@ export default function Screen<T> ({
     ordering: undefined,
     column2Show: middle[0].value
   })
+  const [page, setPage] = useState(1)
   const openMenu = () => setVisible(true)
   const closeMenu = () => setVisible(false)
   function handleMenuSelect (item: Row<T>) {
@@ -45,8 +53,10 @@ export default function Screen<T> ({
     closeMenu()
   }
 
-  function sort (arr: T[]) {
+  function sort (arr: typeof data) {
     const { orderedColumn, ordering, column2Show } = state
+
+    if (!arr) return []
 
     if (!ordering) return arr
 
@@ -135,26 +145,38 @@ export default function Screen<T> ({
         </DataTable.Title>
       </DataTable.Header>
 
-      {sortedData.map((item, index) => (
-        <DataTable.Row key={index} onPress={() => onPress && onPress(item)}>
-          <DataTable.Cell>{item[first.value]}</DataTable.Cell>
-          <DataTable.Cell numeric>{item[state.column2Show]}</DataTable.Cell>
-          <DataTable.Cell numeric>{item[last.value]}</DataTable.Cell>
-        </DataTable.Row>
-      ))}
-
-      <DataTable.Pagination
-        page={1}
-        numberOfPages={3}
-        onPageChange={(page) => {
-          console.log(page)
-        }}
-        label='1-2 of 6'
-      />
+      {
+        loading
+          ? <ActivityIndicator style={s.loading} />
+          : <>
+              {sortedData.map((item, index) => (
+                <DataTable.Row key={index} onPress={() => onPress && onPress(item)}>
+                  <DataTable.Cell>{item[first.value]}</DataTable.Cell>
+                  <DataTable.Cell numeric>{item[state.column2Show]}</DataTable.Cell>
+                  <DataTable.Cell numeric>{item[last.value]}</DataTable.Cell>
+                </DataTable.Row>
+              ))}
+              <DataTable.Pagination
+                page={page}
+                numberOfPages={sortedData.length % ITEMS_PER_PAGE}
+                onPageChange={(p) => {
+                  const notBigger = p <= sortedData.length % ITEMS_PER_PAGE
+                  const biggerFromZero = p > 0
+                  if (biggerFromZero && notBigger) {
+                    setPage(p)
+                  }
+                }}
+                label={`Страница ${page} из ${sortedData.length % ITEMS_PER_PAGE}`}
+              />
+            </>
+      }
     </DataTable>
   )
 }
 
 const s = StyleSheet.create({
-  menuHack: { width: 1, height: 1 }
+  menuHack: { width: 1, height: 1 },
+  loading: {
+    marginTop: 20
+  }
 })

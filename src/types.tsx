@@ -1,4 +1,7 @@
+import { Client } from 'src/generated/graphql'
+
 export type RootStackParamList = {
+  Auth: undefined
   Root: undefined
   NotFound: undefined
   Modal: undefined
@@ -29,6 +32,9 @@ export type TabTwoParamList = {
 export type ClientsParamList = {
   ClientsScreen: undefined
   NewClientScreen: undefined
+  ViewClientScreen: {
+    client: Pick<Client, 'address' | 'id' | 'companyName' | 'contactFullName' | 'phone' | 'ltv' | 'email'>
+  }
 }
 
 export type ProductsParamList = {
@@ -50,3 +56,5 @@ export type DashboardParamList = {
 export type EmployeesParamList = {
   EmployeesScreen: undefined
 }
+
+export type NotMaybe<T> = T extends null ? T : T

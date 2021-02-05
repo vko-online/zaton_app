@@ -6,7 +6,8 @@ import {
   DrawerItemList
 } from '@react-navigation/drawer'
 
-export default function Component (props: DrawerContentComponentProps<DrawerContentOptions>) {
+interface Props extends DrawerContentComponentProps<DrawerContentOptions> {}
+export default function Component (props: Props) {
   return (
     <DrawerContentScrollView {...props}>
       <DrawerItemList {...props} />
