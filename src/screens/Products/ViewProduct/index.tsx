@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Text, Caption, Subheading } from 'react-native-paper'
+import { Text, Caption, Subheading, Divider } from 'react-native-paper'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useViewProductQuery } from 'src/generated/graphql'
 import { Row, Spacer } from 'src/components/Common'
@@ -32,15 +32,21 @@ export default function Screen ({
           <Text style={s.subtitle}>{`LTV ${data?.product?.ltv || '10,200'} KZT`}</Text>
         </Row>
         <Spacer />
+        <Divider />
+        <Spacer />
         <Row>
           <Caption>Цена</Caption>
           <Text>{data?.product?.price}</Text>
         </Row>
         <Spacer />
+        <Divider />
+        <Spacer />
         <Row>
           <Caption>Единица измерения</Caption>
           <Text>{data?.product?.unit}</Text>
         </Row>
+        <Spacer />
+        <Divider />
         <Spacer />
         <Row>
           <Caption>Описание</Caption>
