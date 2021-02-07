@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { StyleSheet } from 'react-native'
-import { TextInput, Button, Headline, HelperText } from 'react-native-paper'
+import { Card, TextInput, Button, Headline, HelperText } from 'react-native-paper'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { StackScreenProps } from '@react-navigation/stack'
 import { RootStackParamList } from 'src/types'
@@ -11,6 +11,7 @@ import {
   useSignupMutation
 } from 'src/generated/graphql'
 import AuthContext from 'src/contexts/Auth'
+import { Spacer } from 'src/components/Common'
 
 const schema = Yup.object().shape({
   name: Yup.string().required(),
@@ -51,53 +52,58 @@ export default function Screen ({
       keyboardShouldPersistTaps='always'
       contentContainerStyle={s.root}
     >
-      <Headline>Регистрация</Headline>
-      <TextInput
-        value={formik.values.name}
-        mode='outlined'
-        label='Имя'
-        onChangeText={formik.handleChange('name')}
-        onBlur={formik.handleBlur('name')}
-        autoCapitalize='words'
-        error={!!(formik.touched.name && formik.errors.name)}
-      />
-      <HelperText
-        type='error'
-        visible={!!(formik.touched.name && formik.errors.name)}
-      >
-        {formik.errors.name}
-      </HelperText>
-      <TextInput
-        value={formik.values.email}
-        mode='outlined'
-        label='Email'
-        onChangeText={formik.handleChange('email')}
-        onBlur={formik.handleBlur('email')}
-        keyboardType='email-address'
-        autoCapitalize='none'
-        error={!!(formik.touched.email && formik.errors.email)}
-      />
-      <HelperText
-        type='error'
-        visible={!!(formik.touched.email && formik.errors.email)}
-      >
-        {formik.errors.email}
-      </HelperText>
-      <TextInput
-        value={formik.values.password}
-        mode='outlined'
-        label='Пароль'
-        onChangeText={formik.handleChange('password')}
-        onBlur={formik.handleBlur('password')}
-        autoCapitalize='none'
-        error={!!(formik.touched.password && formik.errors.password)}
-      />
-      <HelperText
-        type='error'
-        visible={!!(formik.touched.password && formik.errors.password)}
-      >
-        {formik.errors.password}
-      </HelperText>
+      <Card>
+        <Card.Content>
+          <Headline>Регистрация</Headline>
+          <TextInput
+            value={formik.values.name}
+            mode='outlined'
+            label='Имя'
+            onChangeText={formik.handleChange('name')}
+            onBlur={formik.handleBlur('name')}
+            autoCapitalize='words'
+            error={!!(formik.touched.name && formik.errors.name)}
+          />
+          <HelperText
+            type='error'
+            visible={!!(formik.touched.name && formik.errors.name)}
+          >
+            {formik.errors.name}
+          </HelperText>
+          <TextInput
+            value={formik.values.email}
+            mode='outlined'
+            label='Email'
+            onChangeText={formik.handleChange('email')}
+            onBlur={formik.handleBlur('email')}
+            keyboardType='email-address'
+            autoCapitalize='none'
+            error={!!(formik.touched.email && formik.errors.email)}
+          />
+          <HelperText
+            type='error'
+            visible={!!(formik.touched.email && formik.errors.email)}
+          >
+            {formik.errors.email}
+          </HelperText>
+          <TextInput
+            value={formik.values.password}
+            mode='outlined'
+            label='Пароль'
+            onChangeText={formik.handleChange('password')}
+            onBlur={formik.handleBlur('password')}
+            autoCapitalize='none'
+            error={!!(formik.touched.password && formik.errors.password)}
+          />
+          <HelperText
+            type='error'
+            visible={!!(formik.touched.password && formik.errors.password)}
+          >
+            {formik.errors.password}
+          </HelperText>
+        </Card.Content>
+      </Card>
+      <Spacer />
       <Button loading={loading} disabled={!formik.isValid || loading} mode='contained' onPress={formik.handleSubmit}>Зарегистрироваться</Button>
     </KeyboardAwareScrollView>
   )
@@ -106,6 +112,6 @@ export default function Screen ({
 const s = StyleSheet.create({
   root: {
     flex: 1,
-    padding: 20
+    padding: 10
   }
 })

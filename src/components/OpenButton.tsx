@@ -1,19 +1,22 @@
 import React from 'react'
 import { View, StyleSheet, TouchableOpacity } from 'react-native'
-import { Text, Colors } from 'react-native-paper'
-import Clipboard from 'expo-clipboard'
-import { useSnackbar } from 'src/contexts/Snackbar'
+import { Colors, Text } from 'react-native-paper'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import * as Linking from 'expo-linking'
 
 interface Props {
   data?: string | null
+  prefix: 'tel' | 'mailto'
 }
-export default function Component ({ data }: Props) {
-  const { show } = useSnackbar()
-
+const icon = {
+  tel: 'phone',
+  mailto: 'email'
+}
+export default function Component ({ prefix, data }: Props) {
   function handlePress () {
-    Clipboard.setString(data!)
-    show('Скопировано')
+    if (Linking.canOpenURL(`${prefix}:${data}`)) {
+      Linking.openURL(`${prefix}:${data}`)
+    }
   }
   if (!data) {
     return <View />
@@ -21,7 +24,7 @@ export default function Component ({ data }: Props) {
   return (
     <TouchableOpacity activeOpacity={0.8} onPress={handlePress} style={s.button}>
       <View style={s.icon}>
-        <Icon name='content-copy' size={18} />
+        <Icon name={icon[prefix] as any} size={18} />
       </View>
       <Text style={s.text}>{data}</Text>
     </TouchableOpacity>

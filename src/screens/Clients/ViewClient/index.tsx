@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Text, Card, Divider, Subheading } from 'react-native-paper'
+import { Title, Text, Colors, Card, Divider, Subheading } from 'react-native-paper'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useViewClientQuery } from 'src/generated/graphql'
 import { Row, Spacer } from 'src/components/Common'
@@ -9,6 +9,7 @@ import { ClientsParamList } from 'src/types'
 import { RouteProp } from '@react-navigation/native'
 import { ScrollView } from 'react-native-gesture-handler'
 import Copy from 'src/components/Copy'
+import OpenButton from 'src/components/OpenButton'
 import Accounts from 'src/components/Card/Accounts'
 
 interface Props {
@@ -28,15 +29,12 @@ export default function Screen ({
   return (
     <ScrollView contentContainerStyle={s.root}>
       <Card>
-        <Card.Title title={client.companyName} />
+        <Row style={s.row}>
+          <Title>{client.companyName}</Title>
+          {/* <Card.Title title={client.companyName} style={{ alignSelf: 'flex-start' }} /> */}
+          <Text style={s.subtitle}>{`LTV ${data?.client?.ltv || '10,200'} KZT`}</Text>
+        </Row>
         <Card.Content>
-          <Row>
-            <Subheading>Наименование</Subheading>
-            <Text>{data?.client?.companyName}</Text>
-          </Row>
-          <Spacer />
-          <Divider />
-          <Spacer />
           <Row>
             <Subheading>ИИН</Subheading>
             <Copy data={data?.client?.iin} />
@@ -54,8 +52,8 @@ export default function Screen ({
           <Row>
             <Subheading>Контакты</Subheading>
             <View style={s.contacts}>
-              <Text>{data?.client?.phone}</Text>
-              <Text>{data?.client?.email}</Text>
+              <OpenButton prefix='tel' data={data?.client?.phone} />
+              <OpenButton prefix='mailto' data={data?.client?.email} />
             </View>
           </Row>
           <Spacer />
@@ -83,9 +81,18 @@ export default function Screen ({
 const s = StyleSheet.create({
   root: {
     flex: 1,
-    padding: 20
+    padding: 10
   },
   contacts: {
     alignItems: 'flex-end'
+  },
+  row: {
+    paddingVertical: 10,
+    paddingHorizontal: 15
+  },
+  subtitle: {
+    fontWeight: 'bold',
+    color: Colors.blue600,
+    fontFamily: 'montserrat-bold'
   }
 })
