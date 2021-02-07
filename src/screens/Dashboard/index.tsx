@@ -1,60 +1,34 @@
-import React, { useState } from 'react'
-import { StyleSheet } from 'react-native'
-import { FAB, Text, Surface } from 'react-native-paper'
+import React from 'react'
+import { StyleSheet, ScrollView } from 'react-native'
+import { Card, IconButton } from 'react-native-paper'
 import { StackScreenProps } from '@react-navigation/stack'
+import { format } from 'date-fns'
+import { ru } from 'date-fns/locale'
+import Contribution from './Charts/Contribution'
 
 import { RootStackParamList } from 'src/types'
+import { Spacer } from 'src/components/Common'
 
 export default function Screen ({
   navigation
 }: StackScreenProps<RootStackParamList, 'NotFound'>) {
-  const [isOpen, setIsOpen] = useState(false)
   return (
-    <Surface style={s.root}>
-      <Text>Hello</Text>
-      <FAB.Group
-        open={isOpen}
-        visible
-        icon={isOpen ? 'calendar-today' : 'plus'}
-        actions={[
-          { icon: 'plus', onPress: () => console.log('Pressed add') },
-          {
-            icon: 'account-plus',
-            label: 'Клиент',
-            onPress: () => console.log('Pressed star')
-          },
-          {
-            icon: 'file-pdf-box',
-            label: 'Коммерческое предложение',
-            onPress: () => console.log('Pressed email')
-          },
-          {
-            icon: 'file-document',
-            label: 'Счет на оплату',
-            onPress: () => console.log('Pressed email')
-          },
-          {
-            icon: 'bell',
-            label: 'Remind',
-            onPress: () => console.log('Pressed notifications'),
-            small: false
-          }
-        ]}
-        onStateChange={({ open }) => setIsOpen(open)}
-        onPress={() => {
-          if (isOpen) {
-            // do something if the speed dial is open
-          }
-        }}
-      />
-    </Surface>
+    <ScrollView style={s.root}>
+      <Card>
+        <Card.Title
+          title='Привет Медет'
+          subtitle={format(new Date(), 'EEEE, d yyyy', { locale: ru })}
+          right={(props) => <IconButton size={40} icon='account-circle-outline' />}
+        />
+      </Card>
+      <Spacer />
+      <Contribution />
+    </ScrollView>
   )
 }
 
 const s = StyleSheet.create({
   root: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
+    padding: 10
   }
 })
