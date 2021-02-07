@@ -1,7 +1,8 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Card, IconButton, Colors, Caption } from 'react-native-paper'
+import { IconButton, Colors, Caption, Text } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Row } from 'src/components/Common'
 
 type State = 'expanded' | 'collapsed'
 interface Props {
@@ -37,22 +38,20 @@ export default function Component ({ id, title, empty, emptyText, children }: Pr
   }
 
   return (
-    <Card>
-      <Card.Title
-        title={title}
-        left={() => (
-          <IconButton
-            onPress={toggle}
-            style={s.icon}
-            color={Colors.grey700}
-            icon={icon[state]}
-            size={30}
-          />
-        )}
-      />
+    <View style={s.root}>
+      <Row style={s.row}>
+        <Text>{title}</Text>
+        <IconButton
+          onPress={toggle}
+          style={s.icon}
+          color={Colors.grey500}
+          icon={icon[state]}
+          size={20}
+        />
+      </Row>
       {
         state === 'expanded'
-          ? <Card.Content>
+          ? <>
               {
                 empty
                   ? <View style={s.empty}>
@@ -60,15 +59,25 @@ export default function Component ({ id, title, empty, emptyText, children }: Pr
                     </View>
                   : children
               }
-            </Card.Content>
+            </>
           : null
       }
-    </Card>
+    </View>
   )
 }
 
 const s = StyleSheet.create({
-  icon: { alignSelf: 'flex-end' },
+  root: {
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.1)'
+    // backgroundColor: 'rgba(0, 0, 0, 0.02)'
+  },
+  row: {
+    paddingLeft: 10
+  },
+  icon: {
+    alignSelf: 'flex-end'
+  },
   empty: {
     alignItems: 'center',
     paddingVertical: 10

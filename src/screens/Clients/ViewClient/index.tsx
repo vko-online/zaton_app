@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Title, Text, Colors, Card, Divider, Subheading } from 'react-native-paper'
+import { Text, Caption, Divider, Subheading } from 'react-native-paper'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useViewClientQuery } from 'src/generated/graphql'
 import { Row, Spacer } from 'src/components/Common'
@@ -28,50 +28,51 @@ export default function Screen ({
 
   return (
     <ScrollView contentContainerStyle={s.root}>
-      <Card>
-        <Row style={s.row}>
-          <Title>{client.companyName}</Title>
-          {/* <Card.Title title={client.companyName} style={{ alignSelf: 'flex-start' }} /> */}
+      <View style={s.content}>
+        <Spacer />
+        <Row>
+          <Subheading>{client.companyName}</Subheading>
           <Text style={s.subtitle}>{`LTV ${data?.client?.ltv || '10,200'} KZT`}</Text>
         </Row>
-        <Card.Content>
-          <Row>
-            <Subheading>ИИН</Subheading>
-            <Copy data={data?.client?.iin} />
-          </Row>
-          <Spacer />
-          <Divider />
-          <Spacer />
-          <Row>
-            <Subheading>{data?.client?.contactRole}</Subheading>
-            <Text>{data?.client?.contactFullName}</Text>
-          </Row>
-          <Spacer />
-          <Divider />
-          <Spacer />
-          <Row>
-            <Subheading>Контакты</Subheading>
-            <View style={s.contacts}>
-              <OpenButton prefix='tel' data={data?.client?.phone} />
-              <OpenButton prefix='mailto' data={data?.client?.email} />
-            </View>
-          </Row>
-          <Spacer />
-          <Divider />
-          <Spacer />
-          <Row>
-            <Subheading>Адрес</Subheading>
-            <Text>{data?.client?.address}</Text>
-          </Row>
-          <Spacer />
-          <Divider />
-          <Spacer />
-          <Row>
-            <Subheading>Примечание</Subheading>
-            <Text>{data?.client?.note}</Text>
-          </Row>
-        </Card.Content>
-      </Card>
+        <Spacer />
+        <Divider />
+        <Spacer />
+        <Row>
+          <Caption>ИИН</Caption>
+          <Copy data={data?.client?.iin} />
+        </Row>
+        <Spacer />
+        <Divider />
+        <Spacer />
+        <Row>
+          <Caption>{data?.client?.contactRole}</Caption>
+          <Text>{data?.client?.contactFullName}</Text>
+        </Row>
+        <Spacer />
+        <Divider />
+        <Spacer />
+        <Row>
+          <Caption>Контакты</Caption>
+          <View style={s.contacts}>
+            <OpenButton prefix='tel' data={data?.client?.phone} />
+            <OpenButton prefix='mailto' data={data?.client?.email} />
+          </View>
+        </Row>
+        <Spacer />
+        <Divider />
+        <Spacer />
+        <Row>
+          <Caption>Адрес</Caption>
+          <Text>{data?.client?.address}</Text>
+        </Row>
+        <Spacer />
+        <Divider />
+        <Spacer />
+        <Row>
+          <Caption>Примечание</Caption>
+          <Text>{data?.client?.note}</Text>
+        </Row>
+      </View>
       <Spacer />
       <Accounts data={data?.client?.accounts} />
     </ScrollView>
@@ -81,18 +82,15 @@ export default function Screen ({
 const s = StyleSheet.create({
   root: {
     flex: 1,
-    padding: 10
+    backgroundColor: '#fff'
+  },
+  content: {
+    paddingHorizontal: 10
   },
   contacts: {
     alignItems: 'flex-end'
   },
-  row: {
-    paddingVertical: 10,
-    paddingHorizontal: 15
-  },
   subtitle: {
-    fontWeight: 'bold',
-    color: Colors.blue600,
-    fontFamily: 'montserrat-bold'
+    fontWeight: 'bold'
   }
 })
