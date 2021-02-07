@@ -25,8 +25,15 @@ export type Query = {
   users: Maybe<Array<Maybe<User>>>;
   me: Maybe<User>;
   company: Maybe<Company>;
-  clients: Maybe<Array<Maybe<Client>>>;
+  clients: Array<Client>;
+  products: Array<Product>;
+  product: Maybe<Product>;
   client: Maybe<Client>;
+};
+
+
+export type QueryProductArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -107,6 +114,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   signup: Maybe<AuthPayload>;
   login: Maybe<AuthPayload>;
+  createProduct: Maybe<Product>;
   createCompany: Maybe<Company>;
   updateCompany: Maybe<Company>;
   createClient: Maybe<Client>;
@@ -121,6 +129,11 @@ export type MutationSignupArgs = {
 
 export type MutationLoginArgs = {
   data: Maybe<SigninInput>;
+};
+
+
+export type MutationCreateProductArgs = {
+  data: Maybe<ProductInput>;
 };
 
 
@@ -147,7 +160,6 @@ export type ProductInput = {
   name: Scalars['String'];
   price: Scalars['Int'];
   unit: Maybe<Scalars['String']>;
-  ltv: Maybe<Scalars['Int']>;
   description: Maybe<Scalars['String']>;
 };
 
@@ -156,6 +168,7 @@ export type Product = {
   id: Scalars['String'];
   name: Scalars['String'];
   price: Scalars['Int'];
+  description: Maybe<Scalars['String']>;
   unit: Maybe<Scalars['String']>;
   ltv: Maybe<Scalars['Int']>;
   docs: Array<Doc>;
@@ -629,10 +642,10 @@ export type ClientsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ClientsQuery = (
   { __typename?: 'Query' }
-  & { clients: Maybe<Array<Maybe<(
+  & { clients: Array<(
     { __typename?: 'Client' }
     & Pick<Client, 'id' | 'companyName' | 'contactFullName' | 'address' | 'phone' | 'ltv' | 'email'>
-  )>>> }
+  )> }
 );
 
 export type CreateClientMutationVariables = Exact<{
@@ -686,21 +699,18 @@ export type ViewCompanyQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ViewCompanyQuery = (
   { __typename?: 'Query' }
-  & { me: Maybe<(
-    { __typename?: 'User' }
-    & { company: Maybe<(
-      { __typename?: 'Company' }
-      & Pick<Company, 'name' | 'address' | 'phone' | 'website' | 'email' | 'bin' | 'currency' | 'updatedAt'>
-      & { accounts: Array<(
-        { __typename?: 'Account' }
-        & Pick<Account, 'id' | 'iban' | 'bic' | 'name'>
-      )>, docs: Array<(
-        { __typename?: 'Doc' }
-        & Pick<Doc, 'id' | 'sku' | 'offer' | 'template' | 'draft' | 'updatedAt' | 'createdAt' | 'total'>
-        & { client: Maybe<(
-          { __typename?: 'Client' }
-          & Pick<Client, 'id' | 'companyName'>
-        )> }
+  & { company: Maybe<(
+    { __typename?: 'Company' }
+    & Pick<Company, 'name' | 'address' | 'phone' | 'website' | 'email' | 'bin' | 'currency' | 'updatedAt'>
+    & { accounts: Array<(
+      { __typename?: 'Account' }
+      & Pick<Account, 'id' | 'iban' | 'bic' | 'name'>
+    )>, docs: Array<(
+      { __typename?: 'Doc' }
+      & Pick<Doc, 'id' | 'sku' | 'offer' | 'template' | 'draft' | 'updatedAt' | 'createdAt' | 'total'>
+      & { client: Maybe<(
+        { __typename?: 'Client' }
+        & Pick<Client, 'id' | 'companyName'>
       )> }
     )> }
   )> }
@@ -714,6 +724,51 @@ export type DashboardQuery = (
   & { me: Maybe<(
     { __typename?: 'User' }
     & Pick<User, 'name' | 'email'>
+  )> }
+);
+
+export type CreateProductMutationVariables = Exact<{
+  data: Maybe<ProductInput>;
+}>;
+
+
+export type CreateProductMutation = (
+  { __typename?: 'Mutation' }
+  & { createProduct: Maybe<(
+    { __typename?: 'Product' }
+    & Pick<Product, 'id'>
+  )> }
+);
+
+export type ProductsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ProductsQuery = (
+  { __typename?: 'Query' }
+  & { products: Array<(
+    { __typename?: 'Product' }
+    & Pick<Product, 'id' | 'name' | 'price' | 'unit' | 'ltv' | 'createdAt'>
+  )> }
+);
+
+export type ViewProductQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type ViewProductQuery = (
+  { __typename?: 'Query' }
+  & { product: Maybe<(
+    { __typename?: 'Product' }
+    & Pick<Product, 'id' | 'name' | 'price' | 'unit' | 'ltv' | 'createdAt' | 'description'>
+    & { docs: Array<(
+      { __typename?: 'Doc' }
+      & Pick<Doc, 'id' | 'date' | 'sku' | 'offer' | 'template' | 'draft' | 'dueDate' | 'note' | 'createdAt'>
+      & { client: Maybe<(
+        { __typename?: 'Client' }
+        & Pick<Client, 'id' | 'companyName'>
+      )> }
+    )> }
   )> }
 );
 
@@ -952,36 +1007,34 @@ export type UpdateCompanyMutationResult = Apollo.MutationResult<UpdateCompanyMut
 export type UpdateCompanyMutationOptions = Apollo.BaseMutationOptions<UpdateCompanyMutation, UpdateCompanyMutationVariables>;
 export const ViewCompanyDocument = gql`
     query ViewCompany {
-  me {
-    company {
+  company {
+    name
+    address
+    phone
+    website
+    email
+    bin
+    accounts {
+      id
+      iban
+      bic
       name
-      address
-      phone
-      website
-      email
-      bin
-      accounts {
-        id
-        iban
-        bic
-        name
-      }
-      currency
+    }
+    currency
+    updatedAt
+    docs {
+      id
+      sku
+      offer
+      template
+      draft
       updatedAt
-      docs {
+      createdAt
+      client {
         id
-        sku
-        offer
-        template
-        draft
-        updatedAt
-        createdAt
-        client {
-          id
-          companyName
-        }
-        total
+        companyName
       }
+      total
     }
   }
 }
@@ -1044,3 +1097,126 @@ export function useDashboardLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type DashboardQueryHookResult = ReturnType<typeof useDashboardQuery>;
 export type DashboardLazyQueryHookResult = ReturnType<typeof useDashboardLazyQuery>;
 export type DashboardQueryResult = Apollo.QueryResult<DashboardQuery, DashboardQueryVariables>;
+export const CreateProductDocument = gql`
+    mutation CreateProduct($data: ProductInput) {
+  createProduct(data: $data) {
+    id
+  }
+}
+    `;
+export type CreateProductMutationFn = Apollo.MutationFunction<CreateProductMutation, CreateProductMutationVariables>;
+
+/**
+ * __useCreateProductMutation__
+ *
+ * To run a mutation, you first call `useCreateProductMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateProductMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createProductMutation, { data, loading, error }] = useCreateProductMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateProductMutation(baseOptions?: Apollo.MutationHookOptions<CreateProductMutation, CreateProductMutationVariables>) {
+        return Apollo.useMutation<CreateProductMutation, CreateProductMutationVariables>(CreateProductDocument, baseOptions);
+      }
+export type CreateProductMutationHookResult = ReturnType<typeof useCreateProductMutation>;
+export type CreateProductMutationResult = Apollo.MutationResult<CreateProductMutation>;
+export type CreateProductMutationOptions = Apollo.BaseMutationOptions<CreateProductMutation, CreateProductMutationVariables>;
+export const ProductsDocument = gql`
+    query Products {
+  products {
+    id
+    name
+    price
+    unit
+    ltv
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useProductsQuery__
+ *
+ * To run a query within a React component, call `useProductsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProductsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProductsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useProductsQuery(baseOptions?: Apollo.QueryHookOptions<ProductsQuery, ProductsQueryVariables>) {
+        return Apollo.useQuery<ProductsQuery, ProductsQueryVariables>(ProductsDocument, baseOptions);
+      }
+export function useProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductsQuery, ProductsQueryVariables>) {
+          return Apollo.useLazyQuery<ProductsQuery, ProductsQueryVariables>(ProductsDocument, baseOptions);
+        }
+export type ProductsQueryHookResult = ReturnType<typeof useProductsQuery>;
+export type ProductsLazyQueryHookResult = ReturnType<typeof useProductsLazyQuery>;
+export type ProductsQueryResult = Apollo.QueryResult<ProductsQuery, ProductsQueryVariables>;
+export const ViewProductDocument = gql`
+    query ViewProduct($id: ID!) {
+  product(id: $id) {
+    id
+    name
+    price
+    unit
+    ltv
+    createdAt
+    description
+    docs {
+      id
+      date
+      sku
+      offer
+      template
+      draft
+      client {
+        id
+        companyName
+      }
+      dueDate
+      note
+      createdAt
+    }
+  }
+}
+    `;
+
+/**
+ * __useViewProductQuery__
+ *
+ * To run a query within a React component, call `useViewProductQuery` and pass it any options that fit your needs.
+ * When your component renders, `useViewProductQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useViewProductQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useViewProductQuery(baseOptions: Apollo.QueryHookOptions<ViewProductQuery, ViewProductQueryVariables>) {
+        return Apollo.useQuery<ViewProductQuery, ViewProductQueryVariables>(ViewProductDocument, baseOptions);
+      }
+export function useViewProductLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ViewProductQuery, ViewProductQueryVariables>) {
+          return Apollo.useLazyQuery<ViewProductQuery, ViewProductQueryVariables>(ViewProductDocument, baseOptions);
+        }
+export type ViewProductQueryHookResult = ReturnType<typeof useViewProductQuery>;
+export type ViewProductLazyQueryHookResult = ReturnType<typeof useViewProductLazyQuery>;
+export type ViewProductQueryResult = Apollo.QueryResult<ViewProductQuery, ViewProductQueryVariables>;

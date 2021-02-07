@@ -37,7 +37,7 @@ export default function Screen ({ navigation }: Props) {
     setRefetching(false)
   }
 
-  const company = data?.me?.company
+  const company = data?.company
 
   useEffect(() => {
     if (company) {

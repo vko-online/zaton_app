@@ -160,7 +160,9 @@ export default function Screen<T> ({
                 <DataTable.Row key={index} onPress={() => onPress && onPress(item)}>
                   <DataTable.Cell>{item[first.value]}</DataTable.Cell>
                   <DataTable.Cell numeric>{item[state.column2Show]}</DataTable.Cell>
-                  <DataTable.Cell numeric>{item[last.value]}</DataTable.Cell>
+                  <DataTable.Cell numeric>
+                    {item[last.value]}
+                  </DataTable.Cell>
                 </DataTable.Row>
               ))}
               <DataTable.Pagination

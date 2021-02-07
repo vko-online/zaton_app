@@ -1,34 +1,32 @@
 query ViewCompany {
-  me {
-    company {
+  company {
+    name
+    address
+    phone
+    website
+    email
+    bin
+    accounts {
+      id
+      iban
+      bic
       name
-      address
-      phone
-      website
-      email
-      bin
-      accounts {
-        id
-        iban
-        bic
-        name
-      }
-      currency
+    }
+    currency
+    updatedAt
+    docs {
+      id
+      sku
+      offer
+      template
+      draft
       updatedAt
-      docs {
+      createdAt
+      client {
         id
-        sku
-        offer
-        template
-        draft
-        updatedAt
-        createdAt
-        client {
-          id
-          companyName
-        }
-        total
+        companyName
       }
+      total
     }
   }
 }

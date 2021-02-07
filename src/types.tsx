@@ -1,4 +1,4 @@
-import { Client, CompanyUpdateInput } from 'src/generated/graphql'
+import { Client, Product, CompanyUpdateInput } from 'src/generated/graphql'
 
 export type RootStackParamList = {
   Auth: undefined
@@ -37,6 +37,10 @@ export type ClientsParamList = {
 
 export type ProductsParamList = {
   ProductsScreen: undefined
+  ViewProductScreen: {
+    product: Product
+  }
+  NewProductScreen: undefined
 }
 
 export type OffersParamList = {

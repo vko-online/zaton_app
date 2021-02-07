@@ -15,9 +15,11 @@ import ClientsScreen from 'src/screens/Clients'
 import NewClientScreen from 'src/screens/Clients/NewClient'
 import ViewClientScreen from 'src/screens/Clients/ViewClient'
 import ProductsScreen from 'src/screens/Products'
+import NewProductScreen from 'src/screens/Products/NewProduct'
+import ViewProductScreen from 'src/screens/Products/ViewProduct'
 import OffersScreen from 'src/screens/Offers'
 // import InvoicesScreen from 'src/screens/Invoices'
-import EmployeesScreen from 'src/screens/Employees'
+// import EmployeesScreen from 'src/screens/Employees'
 import DashboardScreen from 'src/screens/Dashboard'
 import CompanyScreen from 'src/screens/Company'
 import UpdateCompanyScreen from 'src/screens/Company/UpdateCompany'
@@ -27,7 +29,7 @@ import {
   CompanyParamList,
   DashboardParamList,
   DrawerParamList,
-  EmployeesParamList,
+  // EmployeesParamList,
   // InvoicesParamList,
   OffersParamList,
   ProductsParamList,
@@ -100,14 +102,14 @@ export default function DrawerNavigator () {
         component={InvoicesNavigator}
         options={{ title: 'Счета' }}
       /> */}
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name='Employees'
         component={EmployeesNavigator}
         options={{
           title: 'Сотрудники',
           drawerIcon: props => <Icon name='shield-account' size={props.size} color={props.color} />
         }}
-      />
+      /> */}
       <Drawer.Screen
         name='Offers'
         component={OffersNavigator}
@@ -226,6 +228,38 @@ function ProductsNavigator () {
           ...stackOptions
         })}
       />
+      <ProductsStack.Screen
+        name='NewProductScreen'
+        component={NewProductScreen}
+        options={({
+          navigation
+        }: Options) => ({
+          title: 'Новый товар',
+          headerLeft: () => (
+            <IconButton
+              icon='keyboard-backspace'
+              onPress={() => navigation.goBack()}
+            />
+          ),
+          ...stackOptions
+        })}
+      />
+      <ProductsStack.Screen
+        name='ViewProductScreen'
+        component={ViewProductScreen}
+        options={({
+          navigation
+        }: Options) => ({
+          title: 'Просмотр',
+          headerLeft: () => (
+            <IconButton
+              icon='keyboard-backspace'
+              onPress={() => navigation.goBack()}
+            />
+          ),
+          ...stackOptions
+        })}
+      />
     </ProductsStack.Navigator>
   )
 }
@@ -272,26 +306,26 @@ function OffersNavigator () {
   )
 }
 
-const EmployeesStack = createStackNavigator<EmployeesParamList>()
-function EmployeesNavigator () {
-  return (
-    <EmployeesStack.Navigator>
-      <EmployeesStack.Screen
-        name='EmployeesScreen'
-        component={EmployeesScreen}
-        options={({
-          navigation
-        }: Options) => ({
-          title: 'Сотрудники',
-          headerLeft: () => (
-            <IconButton icon='menu' onPress={() => navigation.openDrawer()} />
-          ),
-          ...stackOptions
-        })}
-      />
-    </EmployeesStack.Navigator>
-  )
-}
+// const EmployeesStack = createStackNavigator<EmployeesParamList>()
+// function EmployeesNavigator () {
+//   return (
+//     <EmployeesStack.Navigator>
+//       <EmployeesStack.Screen
+//         name='EmployeesScreen'
+//         component={EmployeesScreen}
+//         options={({
+//           navigation
+//         }: Options) => ({
+//           title: 'Сотрудники',
+//           headerLeft: () => (
+//             <IconButton icon='menu' onPress={() => navigation.openDrawer()} />
+//           ),
+//           ...stackOptions
+//         })}
+//       />
+//     </EmployeesStack.Navigator>
+//   )
+// }
 
 const CompanyStack = createStackNavigator<CompanyParamList>()
 function CompanyNavigator () {

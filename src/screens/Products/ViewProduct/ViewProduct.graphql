@@ -1,0 +1,26 @@
+query ViewProduct ($id: ID!) {
+  product (id: $id) {
+    id
+    name
+    price
+    unit
+    ltv
+    createdAt
+    description
+    docs {
+			id
+      date
+      sku
+      offer
+      template
+      draft
+      client {
+        id
+        companyName
+      }
+      dueDate
+      note
+      createdAt
+    }
+  }
+}
