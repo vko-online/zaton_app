@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { StyleSheet } from 'react-native'
 import { TextInput, Button, Headline, HelperText } from 'react-native-paper'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -7,26 +7,21 @@ import { RootStackParamList } from 'src/types'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import {
-  SigninDocument,
-  SigninMutation,
-  SigninMutationVariables
+  SigninMutationVariables,
+  useSigninMutation
 } from 'src/generated/graphql'
-import AuthContext from 'src/contexts/Auth'
-import { Spacer } from 'src/components/Common'
-import { useMutation } from '@apollo/client'
+import { useAuth } from 'src/contexts/Auth'
 
 const schema = Yup.object().shape({
-  email: Yup.string().email().required(),
-  password: Yup.string().required()
+  email: Yup.string().email('Неверный email').required('Email обязательное поле'),
+  password: Yup.string().required('Пароль обязательное поле')
 })
 
 export default function Screen ({
   navigation
-}: StackScreenProps<RootStackParamList, 'NotFound'>) {
-  const [signIn] = useMutation<SigninMutation, SigninMutationVariables>(
-    SigninDocument
-  )
-  const context = useContext(AuthContext)
+}: StackScreenProps<RootStackParamList, 'Auth'>) {
+  const [signIn] = useSigninMutation()
+  const context = useAuth()
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -54,10 +49,11 @@ export default function Screen ({
       keyboardShouldPersistTaps='always'
       contentContainerStyle={s.root}
     >
-      <Headline>Sign In</Headline>
-      <Spacer />
+      <Headline>Вход</Headline>
       <TextInput
         value={formik.values.email}
+        mode='outlined'
+        label='Email'
         onChangeText={formik.handleChange('email')}
         onBlur={formik.handleBlur('email')}
         keyboardType='email-address'
@@ -70,9 +66,10 @@ export default function Screen ({
       >
         {formik.errors.email}
       </HelperText>
-      <Spacer />
       <TextInput
         value={formik.values.password}
+        mode='outlined'
+        label='Пароль'
         onChangeText={formik.handleChange('password')}
         onBlur={formik.handleBlur('password')}
         autoCapitalize='none'
@@ -84,8 +81,7 @@ export default function Screen ({
       >
         {formik.errors.password}
       </HelperText>
-      <Spacer />
-      <Button mode='contained' onPress={formik.handleSubmit}>Submit</Button>
+      <Button mode='contained' onPress={formik.handleSubmit}>Войти</Button>
     </KeyboardAwareScrollView>
   )
 }

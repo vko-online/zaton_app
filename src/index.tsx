@@ -25,7 +25,7 @@ export default function Index () {
           <Provider theme={theme}>
             <SnackbarProvider>
               <Navigation colorScheme={colorScheme} />
-              <StatusBar style='light' />
+              <StatusBar style='dark' />
               <SnackbarRoot />
             </SnackbarProvider>
           </Provider>

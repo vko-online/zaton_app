@@ -52,6 +52,7 @@ function RootNavigator () {
       },
       signOut: async () => {
         await client.clearStore()
+        await AsyncStorage.removeItem('userToken')
         dispatch({ type: 'SIGN_OUT', token: null })
       },
       signUp: async (token: string) => {

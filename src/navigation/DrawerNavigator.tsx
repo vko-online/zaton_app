@@ -9,13 +9,14 @@ import {
   createStackNavigator
 } from '@react-navigation/stack'
 import DrawerContent from './Drawer'
+import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 
 import ClientsScreen from 'src/screens/Clients'
 import NewClientScreen from 'src/screens/Clients/NewClient'
 import ViewClientScreen from 'src/screens/Clients/ViewClient'
 import ProductsScreen from 'src/screens/Products'
 import OffersScreen from 'src/screens/Offers'
-import InvoicesScreen from 'src/screens/Invoices'
+// import InvoicesScreen from 'src/screens/Invoices'
 import EmployeesScreen from 'src/screens/Employees'
 import DashboardScreen from 'src/screens/Dashboard'
 import CompanyScreen from 'src/screens/Company'
@@ -27,7 +28,7 @@ import {
   DashboardParamList,
   DrawerParamList,
   EmployeesParamList,
-  InvoicesParamList,
+  // InvoicesParamList,
   OffersParamList,
   ProductsParamList,
   SettingsParamList
@@ -48,7 +49,7 @@ const stackOptions = {
 }
 
 type DrawerType = 'front' | 'back' | 'slide' | 'permanent';
-export default function BottomTabNavigator () {
+export default function DrawerNavigator () {
   const dimensions = useWindowDimensions()
   const isLargeScreen = dimensions.width >= 768
   const drawerType = Platform.select<DrawerType>({
@@ -65,42 +66,63 @@ export default function BottomTabNavigator () {
       <Drawer.Screen
         name='Dashboard'
         component={DashboardNavigator}
-        options={{ title: 'Главная' }}
+        options={{
+          title: 'Главная',
+          drawerIcon: props => <Icon name='view-dashboard' size={props.size} color={props.color} />
+        }}
       />
       <Drawer.Screen
         name='Company'
         component={CompanyNavigator}
-        options={{ title: 'Моя компания' }}
+        options={{
+          title: 'Моя компания',
+          drawerIcon: props => <Icon name='home-city' size={props.size} color={props.color} />
+        }}
       />
       <Drawer.Screen
         name='Clients'
         component={ClientsNavigator}
-        options={{ title: 'Клиенты' }}
+        options={{
+          title: 'Клиенты',
+          drawerIcon: props => <Icon name='account-group' size={props.size} color={props.color} />
+        }}
       />
       <Drawer.Screen
         name='Products'
         component={ProductsNavigator}
-        options={{ title: 'Товары' }}
+        options={{
+          title: 'Товары',
+          drawerIcon: props => <Icon name='cart-outline' size={props.size} color={props.color} />
+        }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name='Invoices'
         component={InvoicesNavigator}
         options={{ title: 'Счета' }}
-      />
+      /> */}
       <Drawer.Screen
         name='Employees'
         component={EmployeesNavigator}
-        options={{ title: 'Сотрудники' }}
+        options={{
+          title: 'Сотрудники',
+          drawerIcon: props => <Icon name='shield-account' size={props.size} color={props.color} />
+        }}
       />
       <Drawer.Screen
         name='Offers'
         component={OffersNavigator}
-        options={{ title: 'Коммерческие предложения' }}
+        options={{
+          title: 'Коммерческие предложения',
+          drawerIcon: props => <Icon name='file-document-outline' size={props.size} color={props.color} />
+        }}
       />
       <Drawer.Screen
         name='Settings'
         component={SettingsNavigator}
-        options={{ title: 'Настройки' }}
+        options={{
+          title: 'Настройки',
+          drawerIcon: props => <Icon name='cogs' size={props.size} color={props.color} />
+        }}
       />
     </Drawer.Navigator>
   )
@@ -208,26 +230,26 @@ function ProductsNavigator () {
   )
 }
 
-const InvoicesStack = createStackNavigator<InvoicesParamList>()
-function InvoicesNavigator () {
-  return (
-    <InvoicesStack.Navigator>
-      <InvoicesStack.Screen
-        name='InvoicesScreen'
-        component={InvoicesScreen}
-        options={({
-          navigation
-        }: Options) => ({
-          title: 'Счета',
-          headerLeft: () => (
-            <IconButton icon='menu' onPress={() => navigation.openDrawer()} />
-          ),
-          ...stackOptions
-        })}
-      />
-    </InvoicesStack.Navigator>
-  )
-}
+// const InvoicesStack = createStackNavigator<InvoicesParamList>()
+// function InvoicesNavigator () {
+//   return (
+//     <InvoicesStack.Navigator>
+//       <InvoicesStack.Screen
+//         name='InvoicesScreen'
+//         component={InvoicesScreen}
+//         options={({
+//           navigation
+//         }: Options) => ({
+//           title: 'Счета',
+//           headerLeft: () => (
+//             <IconButton icon='menu' onPress={() => navigation.openDrawer()} />
+//           ),
+//           ...stackOptions
+//         })}
+//       />
+//     </InvoicesStack.Navigator>
+//   )
+// }
 
 const OffersStack = createStackNavigator<OffersParamList>()
 function OffersNavigator () {

@@ -1,0 +1,6 @@
+query Dashboard {
+  me {
+    name
+    email
+  }
+}

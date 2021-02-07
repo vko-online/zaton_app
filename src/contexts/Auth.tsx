@@ -1,4 +1,4 @@
-import { createContext } from 'react'
+import { createContext, useContext } from 'react'
 
 export interface IAuthContext {
   signIn: (token: string) => Promise<void>
@@ -44,5 +44,9 @@ export function authReducer (prevState: IState, action: IAction): IState {
   return initialState
 }
 const AuthContext = createContext<IAuthContext>({} as IAuthContext)
+
+export function useAuth () {
+  return useContext(AuthContext)
+}
 
 export default AuthContext

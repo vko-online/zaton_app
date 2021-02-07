@@ -72,6 +72,7 @@ export default function Screen ({ route, navigation }: Props) {
             onChangeText={formik.handleChange('name')}
             value={formik.values.name}
           />
+          <Spacer />
           <TextInput
             label='БИН'
             placeholder='БИН компании'
