@@ -1,0 +1,12 @@
+mutation UpdateCompany ($data: CompanyUpdateInput) {
+  updateCompany (data: $data) {
+      name
+      address
+      phone
+      website
+      email
+      bin
+      currency
+      updatedAt
+  }
+}

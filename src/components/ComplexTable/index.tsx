@@ -1,5 +1,5 @@
-import { ApolloError } from '@apollo/client'
 import React, { useState } from 'react'
+import { ApolloError } from '@apollo/client'
 import { StyleSheet, View } from 'react-native'
 import { DataTable, Menu, ActivityIndicator } from 'react-native-paper'
 
@@ -17,6 +17,7 @@ interface Props<T> {
   last: Row<T>
   onPress?: (item: T) => void
   error?: ApolloError
+  sortable?: boolean
 }
 const Order = {
   ascending: 'ascending',
@@ -34,8 +35,10 @@ export default function Screen<T> ({
   last,
   loading,
   error,
+  sortable = true,
   onPress
 }: Props<T>) {
+  console.log('data', data)
   const [visible, setVisible] = useState(false)
   const [state, setState] = useState<State<T>>({
     orderedColumn: 1,
@@ -54,9 +57,9 @@ export default function Screen<T> ({
   }
 
   function sort (arr: typeof data) {
-    const { orderedColumn, ordering, column2Show } = state
-
     if (!arr) return []
+
+    const { orderedColumn, ordering, column2Show } = state
 
     if (!ordering) return arr
 
@@ -90,16 +93,18 @@ export default function Screen<T> ({
         <DataTable.Title
           sortDirection={state.orderedColumn === 1 ? state.ordering : undefined}
           onPress={() => {
-            setState({
-              ...state,
-              orderedColumn: 1,
-              ordering:
-                state.orderedColumn === 1
-                  ? state.ordering === 'ascending'
-                      ? 'descending'
-                      : 'ascending'
-                  : 'descending'
-            })
+            if (sortable) {
+              setState({
+                ...state,
+                orderedColumn: 1,
+                ordering:
+                  state.orderedColumn === 1
+                    ? state.ordering === 'ascending'
+                        ? 'descending'
+                        : 'ascending'
+                    : 'descending'
+              })
+            }
           }}
         >
           {first.label}
@@ -129,16 +134,18 @@ export default function Screen<T> ({
           sortDirection={state.orderedColumn === 3 ? state.ordering : undefined}
           numeric
           onPress={() => {
-            setState({
-              ...state,
-              orderedColumn: 3,
-              ordering:
-                state.orderedColumn === 3
-                  ? state.ordering === 'ascending'
-                      ? 'descending'
-                      : 'ascending'
-                  : 'descending'
-            })
+            if (sortable) {
+              setState({
+                ...state,
+                orderedColumn: 3,
+                ordering:
+                  state.orderedColumn === 3
+                    ? state.ordering === 'ascending'
+                        ? 'descending'
+                        : 'ascending'
+                    : 'descending'
+              })
+            }
           }}
         >
           {last.label}

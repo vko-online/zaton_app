@@ -1,4 +1,4 @@
-import { Client } from 'src/generated/graphql'
+import { Client, CompanyUpdateInput } from 'src/generated/graphql'
 
 export type RootStackParamList = {
   Auth: undefined
@@ -7,10 +7,14 @@ export type RootStackParamList = {
   Modal: undefined
 }
 
-export type BottomTabParamList = {
-  TabOne: undefined
-  TabTwo: undefined
-}
+export type ModalParamList = {
+  Search: undefined
+  Notifications: undefined
+  NewClientScreen: undefined
+  NewAccountScreen: undefined
+  NewProductScreen: undefined
+  NewOfferScreen: undefined
+  NewDocScreen: undefined}
 
 export type DrawerParamList = {
   Clients: undefined
@@ -19,14 +23,8 @@ export type DrawerParamList = {
   Offers: undefined
   Dashboard: undefined
   Employees: undefined
-}
-
-export type TabOneParamList = {
-  TabOneScreen: undefined
-}
-
-export type TabTwoParamList = {
-  TabTwoScreen: undefined
+  Company: undefined
+  Settings: undefined
 }
 
 export type ClientsParamList = {
@@ -55,6 +53,17 @@ export type DashboardParamList = {
 
 export type EmployeesParamList = {
   EmployeesScreen: undefined
+}
+
+export type CompanyParamList = {
+  CompanyScreen: undefined
+  UpdateCompanyScreen: {
+    company: CompanyUpdateInput
+  }
+}
+
+export type SettingsParamList = {
+  SettingsScreen: undefined
 }
 
 export type NotMaybe<T> = T extends null ? T : T

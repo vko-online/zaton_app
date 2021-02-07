@@ -8,6 +8,7 @@ import useColorScheme from 'src/hooks/useColorScheme'
 import Navigation from 'src/navigation'
 import { getTheme } from 'src/constants/Theme'
 import client from 'src/services/api'
+import { SnackbarProvider, SnackbarRoot } from 'src/contexts/Snackbar'
 
 export default function Index () {
   const isLoadingComplete = useCachedResources()
@@ -22,8 +23,11 @@ export default function Index () {
       <SafeAreaProvider>
         <ApolloProvider client={client}>
           <Provider theme={theme}>
-            <Navigation colorScheme={colorScheme} />
-            <StatusBar style='light' />
+            <SnackbarProvider>
+              <Navigation colorScheme={colorScheme} />
+              <StatusBar style='light' />
+              <SnackbarRoot />
+            </SnackbarProvider>
           </Provider>
         </ApolloProvider>
       </SafeAreaProvider>

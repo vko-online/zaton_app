@@ -20,8 +20,17 @@ const common: Partial<typeof DefaultTheme> = {
   }
 }
 
+const defaultTheme: typeof DefaultTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#304C89',
+    placeholder: '#bbb'
+  }
+}
+
 export function getTheme (colorScheme: ColorSchemeName): typeof DefaultTheme {
-  const currentTheme = colorScheme === 'dark' ? DarkTheme : DefaultTheme
+  const currentTheme = colorScheme === 'dark' ? DarkTheme : defaultTheme
   return {
     ...currentTheme,
     ...common

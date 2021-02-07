@@ -1,7 +1,10 @@
 import React, { ReactNode } from 'react'
 import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native'
 
-export const Spacer = () => <View style={s.spacer} />
+interface SpacerProps {
+  size?: number
+}
+export const Spacer = ({ size = 10 }: SpacerProps) => <View style={{ height: size }} />
 export const Flex = () => <View style={s.flex} />
 
 interface RowProps {
@@ -11,9 +14,6 @@ interface RowProps {
 export const Row = ({ children, style }: RowProps) => <View style={[s.row, style]}>{children}</View>
 
 const s = StyleSheet.create({
-  spacer: {
-    height: 10
-  },
   flex: {
     flex: 1
   },

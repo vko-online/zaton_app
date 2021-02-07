@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, ScrollView, RefreshControl } from 'react-native'
-import { Colors, FAB, Surface } from 'react-native-paper'
 import { StackScreenProps } from '@react-navigation/stack'
 import ComplexTable from 'src/components/ComplexTable'
 import { Client, Maybe, useClientsQuery } from 'src/generated/graphql'
 
 import { ClientsParamList } from 'src/types'
+import NavButton from 'src/components/NavButton'
 
 export default function Screen ({
   navigation
@@ -19,45 +19,61 @@ export default function Screen ({
     setRefreshing(false)
   }
 
-  function handlePress (client?: Maybe<Pick<Client, 'address' | 'id' | 'companyName' | 'contactFullName' | 'phone' | 'ltv' | 'email'>>) {
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <NavButton title='Создать' onPress={() => navigation.navigate('NewClientScreen') } />
+    })
+  }, [navigation])
+
+  function handlePress (
+    client?: Maybe<
+      Pick<
+        Client,
+        | 'address'
+        | 'id'
+        | 'companyName'
+        | 'contactFullName'
+        | 'phone'
+        | 'ltv'
+        | 'email'
+      >
+    >
+  ) {
     if (client) {
       navigation.navigate('ViewClientScreen', { client })
     }
   }
 
   return (
-    <Surface style={s.root}>
-      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}>
-        <ComplexTable
-          data={data?.clients}
-          loading={loading}
-          error={error}
-          onPress={handlePress}
-          first={{ label: 'Наименование', value: 'companyName' } as any}
-          middle={[{ label: 'Адрес', value: 'address' }, { label: 'Контактное лицо', value: 'contactFullName' }, { label: 'Телефон', value: 'phone' }, { label: 'Email', value: 'email' }] as any}
-          last={{ label: 'ПСК', value: 'ltv' } as any}
-        />
-      </ScrollView>
-      <FAB
-        style={s.fab}
-        icon='plus'
-        label='Создать'
-        uppercase={false}
-        onPress={() => navigation.navigate('NewClientScreen')}
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+      }
+      style={s.root}
+    >
+      <ComplexTable
+        data={data?.clients}
+        sortable={false} // TODO: sorting crashing
+        loading={loading}
+        error={error}
+        onPress={handlePress}
+        first={{ label: 'Наименование', value: 'companyName' } as any}
+        middle={
+          [
+            { label: 'Адрес', value: 'address' },
+            { label: 'Контактное лицо', value: 'contactFullName' },
+            { label: 'Телефон', value: 'phone' },
+            { label: 'Email', value: 'email' }
+          ] as any
+        }
+        last={{ label: 'ПСК', value: 'ltv' } as any}
       />
-    </Surface>
+    </ScrollView>
   )
 }
 
 const s = StyleSheet.create({
   root: {
-    flex: 1
-  },
-  fab: {
-    backgroundColor: Colors.red200,
-    position: 'absolute',
-    margin: 16,
-    right: 16,
-    bottom: 16
+    backgroundColor: '#fff'
   }
 })
