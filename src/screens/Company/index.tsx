@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, ImageBackground, View, ScrollView, RefreshControl } from 'react-native'
 import {
-  Subheading,
   Text,
   ActivityIndicator,
   Button,
@@ -77,45 +76,42 @@ export default function Screen ({ navigation }: Props) {
   }
 
   return (
-    <ScrollView refreshControl={
-      <RefreshControl refreshing={refetching} onRefresh={handleRefetch} />
-    } contentContainerStyle={s.root}>
-      <Container empty={!company} emptyText='Нет данных' id='company' title={company?.name}>
-        <Row>
-          <Subheading>BIN</Subheading>
-          <Copy data={company?.bin} />
-        </Row>
-        <Spacer />
-        <Divider />
-        <Spacer />
-        <Row>
-          <Subheading>Адрес</Subheading>
-          <Text>{company?.address}</Text>
-        </Row>
-        <Spacer />
-        <Divider />
-        <Spacer />
-        <Row>
-          <Subheading>Контакты</Subheading>
-          <View style={s.contacts}>
-            <Text>{company?.phone}</Text>
-            <Text>{company?.email}</Text>
-            <Text>{company?.website}</Text>
-          </View>
-        </Row>
-      </Container>
-      <Spacer />
-      <Accounts data={[{ id: '1', bic: 'KJANS1', iban: '124121', name: 'Kaspi' }]} />
-      <Spacer />
-      <Docs />
-      <Spacer />
-      <DocOffers />
-      <Spacer />
-      <DocTemplates />
-      <Spacer />
-      <DocDrafts />
-      <Spacer size={40} />
-    </ScrollView>
+    <View style={s.root}>
+      <ScrollView refreshControl={
+        <RefreshControl refreshing={refetching} onRefresh={handleRefetch} />
+      }>
+        <Container empty={!company} emptyText='Нет данных' id='company' title={company?.name}>
+          <Row>
+            <Caption>BIN</Caption>
+            <Copy data={company?.bin} />
+          </Row>
+          <Spacer />
+          <Divider />
+          <Spacer />
+          <Row>
+            <Caption>Адрес</Caption>
+            <Text>{company?.address}</Text>
+          </Row>
+          <Spacer />
+          <Divider />
+          <Spacer />
+          <Row>
+            <Caption>Контакты</Caption>
+            <View style={s.contacts}>
+              <Text>{company?.phone}</Text>
+              <Text>{company?.email}</Text>
+              <Text>{company?.website}</Text>
+            </View>
+          </Row>
+        </Container>
+        <Accounts data={[{ id: '1', bic: 'KJANS1', iban: '124121', name: 'Kaspi' }]} />
+        <Docs />
+        <DocOffers />
+        <DocTemplates />
+        <DocDrafts />
+        <Spacer size={40} />
+      </ScrollView>
+    </View>
   )
 }
 
@@ -134,7 +130,8 @@ const s = StyleSheet.create({
     justifyContent: 'center'
   },
   root: {
-    padding: 10
+    flex: 1,
+    backgroundColor: '#fff'
   },
   contacts: {
     alignItems: 'flex-end'

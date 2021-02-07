@@ -44,14 +44,14 @@ export default function Component ({ id, title, empty, emptyText, children }: Pr
         <IconButton
           onPress={toggle}
           style={s.icon}
-          color={Colors.grey500}
+          color={Colors.grey400}
           icon={icon[state]}
           size={20}
         />
       </Row>
       {
         state === 'expanded'
-          ? <>
+          ? <View style={s.content}>
               {
                 empty
                   ? <View style={s.empty}>
@@ -59,7 +59,7 @@ export default function Component ({ id, title, empty, emptyText, children }: Pr
                     </View>
                   : children
               }
-            </>
+            </View>
           : null
       }
     </View>
@@ -68,9 +68,13 @@ export default function Component ({ id, title, empty, emptyText, children }: Pr
 
 const s = StyleSheet.create({
   root: {
-    borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.1)'
-    // backgroundColor: 'rgba(0, 0, 0, 0.02)'
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(0, 0, 0, 0.12)',
+    backgroundColor: '#fff'
+  },
+  content: {
+    paddingHorizontal: 10,
+    paddingBottom: 10
   },
   row: {
     paddingLeft: 10
