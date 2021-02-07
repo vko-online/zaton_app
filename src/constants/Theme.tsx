@@ -1,5 +1,5 @@
 import { ColorSchemeName } from 'react-native'
-import { DefaultTheme, DarkTheme } from 'react-native-paper'
+import { DefaultTheme } from 'react-native-paper'
 
 const common: Partial<typeof DefaultTheme> = {
   mode: 'adaptive',
@@ -30,7 +30,8 @@ const defaultTheme: typeof DefaultTheme = {
 }
 
 export function getTheme (colorScheme: ColorSchemeName): typeof DefaultTheme {
-  const currentTheme = colorScheme === 'dark' ? DarkTheme : defaultTheme
+  // const currentTheme = colorScheme === 'dark' ? DarkTheme : defaultTheme
+  const currentTheme = defaultTheme
   return {
     ...currentTheme,
     ...common

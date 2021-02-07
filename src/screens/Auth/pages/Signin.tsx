@@ -20,7 +20,7 @@ const schema = Yup.object().shape({
 export default function Screen ({
   navigation
 }: StackScreenProps<RootStackParamList, 'Auth'>) {
-  const [signIn] = useSigninMutation()
+  const [signIn, { loading }] = useSigninMutation()
   const context = useAuth()
   const formik = useFormik({
     initialValues: {
@@ -81,7 +81,7 @@ export default function Screen ({
       >
         {formik.errors.password}
       </HelperText>
-      <Button mode='contained' onPress={formik.handleSubmit}>Войти</Button>
+      <Button loading={loading} disabled={!formik.isValid || loading} mode='contained' onPress={formik.handleSubmit}>Войти</Button>
     </KeyboardAwareScrollView>
   )
 }

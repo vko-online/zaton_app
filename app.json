@@ -4,6 +4,7 @@
     "slug": "fragments",
     "version": "1.0.0",
     "orientation": "portrait",
+    "owner": "vkoonline",
     "icon": "./src/assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",

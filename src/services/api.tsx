@@ -3,8 +3,10 @@ import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
+const API = 'https://zaton-server.herokuapp.com'
+// const API = 'http://localhost:4000'
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4000'
+  uri: API
 })
 const authLink = setContext(async (_, { headers }) => {
   // get the authentication token from local storage if it exists
